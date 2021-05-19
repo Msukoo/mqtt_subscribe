@@ -16,24 +16,21 @@ import java.time.LocalDateTime;
 public class ServiceController {
     private static final Logger logger =
             LoggerFactory.getLogger(ServiceController.class);
-    private CleanhouseService cleanhouseService;
-    public ServiceController(CleanhouseService cleanhouseService){
-        this.cleanhouseService = cleanhouseService;
+    private MqttService mqttService;
+    public ServiceController(MqttService mqttService){
+        this.mqttService = mqttService;
     }
 
     private ClientMqtt clientMqtt;
 
-    private final String topic = "data/#";
-    private final String url = "tcp://localhost:1883";
+    private final String topic = "mqtt/#";
+    private final String url = "tcp://localhost:18833";
 
-    private final String _WEIGHT = "_weight";
-    private final String _HEIGHT = "_height";
+    private final String _DATA1 = "_DATA1";
+    private final String _DATA2 = "_DATA2";
 
-    private final String WEIGHT = "weight";
-    private final String HEIGHT = "height";
-
-    private final String TPLASTIC = "Tplastic";
-    private final String tPLASTIC = "tplastic";
+    private final String DATA1 = "DATA1";
+    private final String DATA2 = "DATA2";
 
     private final String NUMBER1 = "1";
     private final String NUMBER2 = "2";
@@ -67,26 +64,14 @@ public class ServiceController {
         String dbParam = topics[1]; //db명
         String recycleType = topics[2];
         Timestamp ts = localDateTimeToTimeStamp(LocalDateTime.now());
-        recycleType = (recycleType.equals(tPLASTIC)) ? TPLASTIC : recycleType;
 
         /* db process */
-        Values heightValues = new Values(recycleType + _HEIGHT, HEIGHT, fValues[0], ts);
-        Values weightValues = new Values(recycleType + _WEIGHT, WEIGHT, fValues[1], ts);
-        logger.debug(heightValues.toString());
-        logger.debug(weightValues.toString());
+        Values data1Values = new Values(recycleType + _DATA1, DATA1, fValues[0], ts);
+        Values data2Values = new Values(recycleType + _DATA2, DATA2, fValues[1], ts);
+        logger.debug(data1Values.toString());
+        logger.debug(data2Values.toString());
 
-        boolean result = InsertDB(dbParam, heightValues, weightValues);
-//                if (dbParam.contains("1")) {
-//                    result = cleanhouseService.insertData1(heightValues, weightValues);
-//                } else if (dbParam.contains("2")) {
-//                    result = cleanhouseService.insertData2(heightValues, weightValues);
-//                } else if (dbParam.contains("3")) {
-//                    result = cleanhouseService.insertData3(heightValues, weightValues);
-//                } else if (dbParam.contains("4")) {
-//                    result = cleanhouseService.insertData4(heightValues, weightValues);
-//                } else if (dbParam.contains("5")) {
-//                    result = cleanhouseService.insertData5(heightValues, weightValues);
-//                }
+        boolean result = InsertDB(dbParam, data1Values, data2Values);
         logger.info("input result : " + result);
 
     };
@@ -119,50 +104,6 @@ public class ServiceController {
         }
         try {
             clientMqtt.setSubscription(topic, listener);
-//            clientMqtt.setSubscription(topic, (topic, msg) -> {
-//                /* msg process */
-//                byte[] payload = msg.getPayload();
-//                String datas = bArr2String(payload);
-//                logger.debug("Message received: topic={}, payload={}", topic, datas);
-//                String[] values = new String(datas).split(",");
-//                float[] fValues = new float[values.length];
-//                for(int i=0; i<fValues.length; i++){
-//                    fValues[i] = Float.parseFloat(values[i]);
-//                }
-//
-//                /* topic process */
-//                String[] topics = new String(topic).split("/");
-//                String dbParam = topics[1]; //db명
-//                String recycleType = topics[2];
-//                Timestamp ts = localDateTimeToTimeStamp(LocalDateTime.now());
-//                recycleType = (recycleType.equals(tPLASTIC)) ? TPLASTIC : recycleType;
-//
-//                /* db process */
-//                Values heightValues = new Values(recycleType + _HEIGHT, HEIGHT, fValues[0], ts);
-//                Values weightValues = new Values(recycleType + _WEIGHT, WEIGHT, fValues[1], ts);
-//                logger.debug(heightValues.toString());
-//                logger.debug(weightValues.toString());
-//
-//                boolean result = InsertDB(dbParam, heightValues, weightValues);
-////                if (dbParam.contains("1")) {
-////                    result = cleanhouseService.insertData1(heightValues, weightValues);
-////                } else if (dbParam.contains("2")) {
-////                    result = cleanhouseService.insertData2(heightValues, weightValues);
-////                } else if (dbParam.contains("3")) {
-////                    result = cleanhouseService.insertData3(heightValues, weightValues);
-////                } else if (dbParam.contains("4")) {
-////                    result = cleanhouseService.insertData4(heightValues, weightValues);
-////                } else if (dbParam.contains("5")) {
-////                    result = cleanhouseService.insertData5(heightValues, weightValues);
-////                }
-//                logger.info("input result : " + result);
-//
-//            });
-//            String datetime = new SimpleDateFormat("yyyyMMddhhmmss").format(new java.sql.Date(System.currentTimeMillis()));
-//            byte[] byteData1 = String.format(Locale.US, "%f/%f/%s", 221.12345f, 221.12345f, datetime).getBytes();
-//            byte[] byteData2 = String.format(Locale.US, "%f/%f/%s", 222.12345f, 222.12345f, datetime).getBytes();
-//            clientMqtt.publish("data/device3/can", byteData1);
-//            clientMqtt.publish("data/device4/can", byteData2);
 
 
         } catch (Exception e) {
@@ -176,18 +117,18 @@ public class ServiceController {
 //        }
     }
 
-    public boolean InsertDB(String dbParam, Values height, Values weight){
+    public boolean InsertDB(String dbParam, Values data1, Values data2){
         boolean result = false;
         if (dbParam.contains(NUMBER1)) {
-            result = cleanhouseService.insertData1(height, weight);
+            result = mqttService.insertData1(data1, data2);
         } else if (dbParam.contains(NUMBER2)) {
-            result = cleanhouseService.insertData2(height, weight);
+            result = mqttService.insertData2(data1, data2);
         } else if (dbParam.contains(NUMBER3)) {
-            result = cleanhouseService.insertData3(height, weight);
+            result = mqttService.insertData3(data1, data2);
         } else if (dbParam.contains(NUMBER4)) {
-            result = cleanhouseService.insertData4(height, weight);
+            result = mqttService.insertData4(data1, data2);
         } else if (dbParam.contains(NUMBER5)) {
-            result = cleanhouseService.insertData5(height, weight);
+            result = mqttService.insertData5(data1, data2);
         }
         return result;
     }
