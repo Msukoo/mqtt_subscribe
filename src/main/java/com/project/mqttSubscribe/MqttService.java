@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class mqttService  {
+public class mqttService {
     @Autowired
     Mapper1 mapper1;
     @Autowired
@@ -21,6 +21,7 @@ public class mqttService  {
     @Autowired
     Mapper5 mapper5;
 
+    
     public boolean insertData1(Values data1Values, Values data2Values){
         int result1 = mapper1.insertData(data1Values);
         int result2 = mapper1.insertData(data2Values);
