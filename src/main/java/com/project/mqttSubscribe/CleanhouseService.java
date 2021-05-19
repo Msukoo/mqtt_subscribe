@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CleanhouseService  {
+public class mqttService  {
     @Autowired
     Mapper1 mapper1;
     @Autowired
@@ -21,33 +21,33 @@ public class CleanhouseService  {
     @Autowired
     Mapper5 mapper5;
 
-    public boolean insertData1(Values heightValues, Values weightValues){
-        int result1 = mapper1.insertData(heightValues);
-        int result2 = mapper1.insertData(weightValues);
+    public boolean insertData1(Values data1Values, Values data2Values){
+        int result1 = mapper1.insertData(data1Values);
+        int result2 = mapper1.insertData(data2Values);
         if(result1==1 && result2==1) return true;
         else return false;
     }
-    public boolean insertData2(Values heightValues, Values weightValues){
-        int result1 = mapper2.insertData(heightValues);
-        int result2 = mapper2.insertData(weightValues);
+    public boolean insertData2(Values data1Values, Values data2Values){
+        int result1 = mapper2.insertData(data1Values);
+        int result2 = mapper2.insertData(data2Values);
         if(result1==1 && result2==1) return true;
         else return false;
     }
-    public boolean insertData3(Values heightValues, Values weightValues){
-        int result1 = mapper3.insertData(heightValues);
-        int result2 = mapper3.insertData(weightValues);
+    public boolean insertData3(Values data1Values, Values data2Values){
+        int result1 = mapper3.insertData(data1Values);
+        int result2 = mapper3.insertData(data2Values);
         if(result1==1 && result2==1) return true;
         else return false;
     }
-    public boolean insertData4(Values heightValues, Values weightValues){
-        int result1 = mapper4.insertData(heightValues);
-        int result2 = mapper4.insertData(weightValues);
+    public boolean insertData4(Values data1Values, Values data2Values){
+        int result1 = mapper4.insertData(data1Values);
+        int result2 = mapper4.insertData(data2Values);
         if(result1==1 && result2==1) return true;
         else return false;
     }
-    public boolean insertData5(Values heightValues, Values weightValues){
-        int result1 = mapper5.insertData(heightValues);
-        int result2 = mapper5.insertData(weightValues);
+    public boolean insertData5(Values data1Values, Values data2Values){
+        int result1 = mapper5.insertData(data1Values);
+        int result2 = mapper5.insertData(data2Values);
         if(result1==1 && result2==1) return true;
         else return false;
     }
