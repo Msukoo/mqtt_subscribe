@@ -14,9 +14,9 @@ mqtt messageQ를 이용한 구독 프로세스
 <img width="600" alt="스크린샷 2021-05-20 오전 2 20 59" src="https://user-images.githubusercontent.com/75176643/118861646-b3641880-b917-11eb-96f3-cb288537bb04.png">
 
 ## programming
-import org.eclipse.paho.client.mqttv3.*
-MqttCallback interface 장착
-MqttClient client : 연결되는 클라이언트 객체
+import org.eclipse.paho.client.mqttv3.*  
+MqttCallback interface 장착  
+MqttClient client : 연결되는 클라이언트 객체  
 
 ### Connection
 ```
